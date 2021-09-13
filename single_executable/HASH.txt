@@ -1,0 +1,7 @@
+hash values of ver. 1.0.0 with SHA-256: 
+    Debian: 
+        D
+    Windows: 
+        W
+    macOS: 
+        m
