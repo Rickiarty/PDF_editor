@@ -1,13 +1,10 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-
 """
  * 
  *  Coded by Rei-Chi Lin 
  * 
 """
 
-from PdfEditor.window import Window
+from PdfEditor.program import WindowProgrm
 from PdfEditor.PdfLib.pdf_manipulation import PdfManipulator
 import os
 import tkinter as tk
@@ -16,12 +13,12 @@ from tkinter import messagebox as mb
 from tkinter import simpledialog as s_dialog
 #from PIL import ImageTk, Image
 
-class MainWindow(Window):
+class MainWindowProgrm(WindowProgrm):
     _pdf_manipulator = None
     _sort_count      = 0
     _image_path      = ""
     # widgets
-    _window               = None
+    _main_program         = None
     _listbox_src          = None
     _listbox_dest         = None
     _browse_import_button = None
@@ -39,27 +36,27 @@ class MainWindow(Window):
 
     def initialize(self):
         self._pdf_manipulator = PdfManipulator()
-        # construct an object of window
-        self._window = tk.Tk()
+        self._main_program = tk.Tk() # an entity of application of Tkinter framework 
+
         # set title, size, position, event(s), and background color of window
-        self._window.title('PDF editor - v{} © 2021 {}'.format(self.version, self.author))
+        self._main_program.title('PDF editor - v{} © 2021 {}'.format(self.version, self.author))
         width = 1000
         height = 600
-        position_x = int(self._window.winfo_screenwidth()/2 - width/2)
-        position_y = int(self._window.winfo_screenheight()/2 - height/2)
-        self._window.geometry('{}x{}'.format(width, height)) # size: width x height
-        self._window.geometry('+{}+{}'.format(position_x, position_y)) # position of left-top of window
-        self._window.configure(background='gray') # background color
-        self._window.protocol(name="WM_DELETE_WINDOW", func=self._on_closing) # set event handler on closing window
+        position_x = int(self._main_program.winfo_screenwidth()/2 - width/2)
+        position_y = int(self._main_program.winfo_screenheight()/2 - height/2)
+        self._main_program.geometry('{}x{}'.format(width, height)) # size: width x height
+        self._main_program.geometry('+{}+{}'.format(position_x, position_y)) # position of left-top of window
+        self._main_program.configure(background='gray') # background color
+        self._main_program.protocol(name="WM_DELETE_WINDOW", func=self._on_closing) # set event handler on closing window
 
         # build listboxes
-        self._listbox_src = tk.Listbox(self._window, selectmode=tk.EXTENDED)
+        self._listbox_src = tk.Listbox(self._main_program, selectmode=tk.EXTENDED)
         self._listbox_src.pack(side=tk.LEFT, fill='both')
-        self._listbox_dest = tk.Listbox(self._window, selectmode=tk.EXTENDED)
+        self._listbox_dest = tk.Listbox(self._main_program, selectmode=tk.EXTENDED)
         self._listbox_dest.pack(side=tk.RIGHT, fill='both')
         
         # build buttons
-        self._browse_import_button = tk.Button(self._window, 
+        self._browse_import_button = tk.Button(self._main_program, 
                                                 width = 64, 
                                                 height=2, 
                                                 text='Import from PDF file', 
@@ -67,7 +64,7 @@ class MainWindow(Window):
                                                 relief=tk.RIDGE, 
                                                 borderwidth=5)
         self._browse_import_button.pack()
-        self._split_button = tk.Button(self._window, 
+        self._split_button = tk.Button(self._main_program, 
                                         width = 64, 
                                         height=2, 
                                         text='Split 1 to multiple', 
@@ -75,7 +72,7 @@ class MainWindow(Window):
                                         relief=tk.RIDGE, 
                                         borderwidth=5)
         self._split_button.pack()
-        self._merge_button = tk.Button(self._window, 
+        self._merge_button = tk.Button(self._main_program, 
                                         width = 64, 
                                         height=2, 
                                         text='Merge all to 1', 
@@ -83,7 +80,7 @@ class MainWindow(Window):
                                         relief=tk.RIDGE, 
                                         borderwidth=5)
         self._merge_button.pack()
-        self._swap_button = tk.Button(self._window, 
+        self._swap_button = tk.Button(self._main_program, 
                                         width = 64, 
                                         height=2, 
                                         text='Swap', 
@@ -91,7 +88,7 @@ class MainWindow(Window):
                                         relief=tk.RIDGE, 
                                         borderwidth=5)
         self._swap_button.pack()
-        self._remove_button = tk.Button(self._window, 
+        self._remove_button = tk.Button(self._main_program, 
                                         width = 64, 
                                         height=2, 
                                         text='Remove', 
@@ -99,7 +96,7 @@ class MainWindow(Window):
                                         relief=tk.RIDGE, 
                                         borderwidth=5)
         self._remove_button.pack()
-        self._sort_button = tk.Button(self._window, 
+        self._sort_button = tk.Button(self._main_program, 
                                         width = 64, 
                                         height=2, 
                                         text='Sort', 
@@ -107,7 +104,7 @@ class MainWindow(Window):
                                         relief=tk.RIDGE, 
                                         borderwidth=5)
         self._sort_button.pack()
-        self._remove_all_button = tk.Button(self._window, 
+        self._remove_all_button = tk.Button(self._main_program, 
                                             width = 64, 
                                             height=2, 
                                             text='Remove all', 
@@ -115,7 +112,7 @@ class MainWindow(Window):
                                             relief=tk.RIDGE, 
                                             borderwidth=5)
         self._remove_all_button.pack()
-        self._browse_export_button = tk.Button(self._window, 
+        self._browse_export_button = tk.Button(self._main_program, 
                                                 width = 64, 
                                                 height=2, 
                                                 text='Export PDF to folder', 
@@ -123,7 +120,7 @@ class MainWindow(Window):
                                                 relief=tk.RIDGE, 
                                                 borderwidth=5)
         self._browse_export_button.pack()
-        self._refresh_button = tk.Button(self._window, 
+        self._refresh_button = tk.Button(self._main_program, 
                                             width = 64, 
                                             height=2, 
                                             text='refresh', 
@@ -136,23 +133,23 @@ class MainWindow(Window):
         #self._image_path = "./PdfEditor/resource/image"
         #self._image_path = os.path.abspath(self._image_path)
         #self._icon_photo = tk.PhotoImage(file = open(os.path.join(self._image_path, 'pdf_icon.png'), 'rb'))
-        #self._window.iconphoto(False, self._icon_photo)
+        #self._main_program.iconphoto(False, self._icon_photo)
         # logo
         #self._studio_logo = Image.open(os.path.join(self._image_path, 'pdf_icon.png'), 'rb')
         #self._studio_logo = self._studio_logo.resize((250, 250), Image.ANTIALIAS) # resize
         #self._studio_logo = ImageTk.PhotoImage(self._studio_logo)
-        #self._logo_banner = tk.Label(self._window, image=self._studio_logo)
+        #self._logo_banner = tk.Label(self._main_program, image=self._studio_logo)
         #self._logo_banner.image = self._studio_logo
         #self._logo_banner.pack()
     
     def _on_closing(self):
         if mb.askokcancel("Quit", "Do you want to quit?"):
             self._pdf_manipulator.close()
-            self._window.destroy()
+            self._main_program.destroy()
     
     def run(self):
         # run app
-        self._window.mainloop()
+        self._main_program.mainloop()
 
     def _refresh(self):
         self._refresh_import()
@@ -182,7 +179,7 @@ class MainWindow(Window):
     def _ask_for_splitting_points(self):
         try:
             series_str = s_dialog.askstring(title="splitting points", prompt="Enter number(s) of point(s) which you want to split a specific PDF file.\nexample of format: 2,4,7")
-            series_str = Window.sanitize_data(series_str)
+            series_str = WindowProgrm.sanitize_data(series_str)
             if series_str == "":
                 return None
             if series_str[-1] == ','[0]:

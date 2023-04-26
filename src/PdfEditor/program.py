@@ -1,13 +1,10 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-
 """
  * 
  *  Coded by Rei-Chi Lin 
  * 
 """
 
-class Window:
+class WindowProgrm:
 
     @property
     def version(self):

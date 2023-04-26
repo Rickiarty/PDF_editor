@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 
 """
  * 
@@ -7,10 +5,10 @@
  * 
 """
 
-from PdfEditor.main_window import MainWindow
+from PdfEditor.main_program import MainWindowProgrm
 
 def main():
-    main_w = MainWindow()
+    main_w = MainWindowProgrm()
     main_w.initialize()
     main_w.run()
 
